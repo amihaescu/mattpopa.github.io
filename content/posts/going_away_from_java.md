@@ -3,6 +3,7 @@ title: "Go-ing away from Java"
 date: 2024-02-10
 author: "Andrei M"
 ---
+
 When I started learning Java 10+ years ago in college it wasn't really because of the portability of
 the language or the JVM. It was because the bar of entry seemed the lowest and the community support
 was pretty amazing. There was an abundance of resources available to learn from and the language
@@ -53,12 +54,12 @@ define methods on any struct, not just the one that you defined the methods on.
 
 ```go
 type Person struct {
-    Name string
-    Age int
+Name string
+Age int
 }
 
 func (p *Person) SayHello()
-    fmt.Printf("Hello, my name is %s and I am %d years old\n", p.Name, p.Age)
+fmt.Printf("Hello, my name is %s and I am %d years old\n", p.Name, p.Age)
 }
 ```
 
@@ -78,15 +79,15 @@ implement it on multiple structs.
 
 ```go
 type Car interface {
-    GetModel() string
+GetModel() string
 }
 
 type SportsCar struct {
-    Model string
+Model string
 }
 
 func (s *SportsCar) GetModel() string {
-    return s.Model
+return s.Model
 }
 ```
 
@@ -125,16 +126,16 @@ you would extend a class in Java, however in Go you can embed multiple structs i
 
 ```go
 type Engine struct {
-    HorsePower int
+HorsePower int
 }
 
 type Car struct {
-    Engine // embeds the Engine struct
+Engine // embeds the Engine struct
 }
 
 func main() {
-    c := Car{Engine{HorsePower: 200}
-    fmt.Println(c.HorsePower) // prints 200
+c := Car{Engine{HorsePower: 200}
+fmt.Println(c.HorsePower) // prints 200
 }
 ```
 
@@ -160,6 +161,64 @@ m := make(map[string]int) // creates a new map with string keys and integer valu
 ```
 
 ### Concurrency
+
+This part requires a separate article, but I will briefly mention it here. Go has built-in support
+for concurrency. This is done through goroutines and channels. Goroutines are lightweight threads
+that are managed by the Go runtime. Goroutines are started with the `go` keyword and run
+concurrently
+with the main program. Any function can be run as goroutine.
+
+```go
+func longRunningFunction() {
+// do some work
+}
+
+func main() {
+    go longRunningFunction()
+    // do some other work
+}
+```
+
+Channels are used to communicate between goroutines. They are a way to pass data between goroutines.
+Channels can be used to send and receive data between goroutines. They are similar to Unix pipes and
+are used to connect goroutines together. Channels are created with the `make` keyword and can be of
+two types: bounded and un-bounded. Bounded channels have a fixed size and can only hold a certain
+number of elements. Un-bounded channels have no size limit and can hold an unlimited number of
+elements.
+
+```go
+
+func main() {
+    c := make(chan int) // creates an unbounded channel for int printingFunction(c)
+    go printingFunction(c) // starts the printingFunction goroutine
+    fmt.Println("Sending data to the channel...")
+    for i := 0; i < 10; i++ {
+        c <- i // sends the value of i to the channel
+    }
+}
+
+func printingFunction(c chan int) {
+    fmt.Println("Awaiting for data to be sent to the channel...")
+    for i := range c { // reads from the channel
+        fmt.Println(i) // prints the value of i
+    }
+}
+```
+
+Comparing it to how Java handles concurrency, Go is much simpler and easier to work with. However, 
+things can get complicated when you have multiple goroutines running concurrently and you need to 
+sychronize them. 
+
+### Conclusion
+
+Overall, I find go to be an interesting language. The strong points of this language are related to performance, 
+low memory footprint and the built-in support for concurrency. The language is simple and easy to learn, but hard 
+to master. My main complaint around Go is the rather immature ecosystem. There are a lot of libraries available,
+however the quality of these libraries can vary. Some may not be supported anymore, some may not be well documented
+and some may not be well tested. If you are working in a corporate environment, where stability and support are 
+important, I think Java would be a better opportunity. Go would be more appropriate in an environment that can 
+tolarate a slight lack of maturity in the ecosystem where most things are built in-house with little reliance on 
+external libraries and frameworks.
 
 
 
